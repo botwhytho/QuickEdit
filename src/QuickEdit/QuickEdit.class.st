@@ -1,14 +1,14 @@
 Class {
-	#name : #GtObjectEditor,
+	#name : #QuickEdit,
 	#superclass : #Object,
 	#instVars : [
 		'object'
 	],
-	#category : #'GtObjectEditor-Core'
+	#category : #'QuickEdit-Core'
 }
 
 { #category : #example }
-GtObjectEditor class >> ArrayAtRootExample [
+QuickEdit class >> ArrayAtRootExample [
 	"Sample from 'https://jsonplaceholder.typicode.com/posts' (slice of first five)"
 
 	<gtExample>
@@ -45,11 +45,11 @@ GtObjectEditor class >> ArrayAtRootExample [
 		"body" : "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque"
 	}
 ]'.
-	^ GtObjectEditor new object: (NeoJSONReader fromString: arr)
+	^ QuickEdit new object: (NeoJSONReader fromString: arr)
 ]
 
 { #category : #example }
-GtObjectEditor class >> DictionaryAtRootExample [
+QuickEdit class >> DictionaryAtRootExample [
 	"Sample from https://httpbin.org/json"
 
 	<gtExample>
@@ -75,11 +75,11 @@ GtObjectEditor class >> DictionaryAtRootExample [
 		"title" : "Sample Slide Show"
 	}
 }'.
-	^ GtObjectEditor new object: (NeoJSONReader fromString: dict)
+	^ QuickEdit new object: (NeoJSONReader fromString: dict)
 ]
 
 { #category : #parsing }
-GtObjectEditor >> destringify: aValue [
+QuickEdit >> destringify: aValue [
 	"BrEditableLabel holds roped text. This tries to convert back to a valid JSON atomic data type (using nil instead of null because Pharo)"
 
 	^ #(true false nil)
@@ -88,7 +88,7 @@ GtObjectEditor >> destringify: aValue [
 ]
 
 { #category : #'view updating' }
-GtObjectEditor >> editingView: aView [
+QuickEdit >> editingView: aView [
 	<gtView>
 	| view associate |
 	associate := [ :x :i | i -> x ].
@@ -125,11 +125,11 @@ GtObjectEditor >> editingView: aView [
 ]
 
 { #category : #accessing }
-GtObjectEditor >> object [
+QuickEdit >> object [
 	^ object
 ]
 
 { #category : #accessing }
-GtObjectEditor >> object: anObject [
+QuickEdit >> object: anObject [
 	object := anObject
 ]
