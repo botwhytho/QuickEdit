@@ -87,15 +87,18 @@ QuickEdit >> destringify: aValue [
 		detect: [ :each | each asString = aValue ]
 		ifNone: [ Number readFrom: aValue ifFail: [ aValue ] ].
 	"`Number readFrom:` trims any text after a string beginning with what looks like a Float or Interger, so undoing that below."
-	^ (temp asString = aValue) not
-		ifTrue: [ aValue ]
-		ifFalse: [ temp ]
+	^ temp asString = aValue
+		ifTrue: [ temp ]
+		ifFalse: [ aValue ]
 ]
 
 { #category : #'view updating' }
 QuickEdit >> editingView: aView [
 	<gtView>
-	| view associate |
+	| view isEditable |
+	isEditable := [ :aValue | 
+	#(#isBoolean #isNil #isNumber #isString)
+		anySatisfy: [ :aSelector | aValue perform: aSelector ] ].
 	view := aView columnedTree
 		title: 'Edit';
 		priority: 1;
@@ -129,16 +132,18 @@ QuickEdit >> editingView: aView [
 			item := each value.
 			(item isDictionary or: [ item isArray ])
 				ifTrue: [ BlTextElement new text: '' asRopedText ]
-				ifFalse: [ BrEditableLabel new
-						look: BrGlamorousEditableLabelLook new glamorousRegularFontAndSize;
-						text: item;
-						when: BrEditorAcceptWish
-							do: [ :aWish | 
-							each key isArray
-								ifTrue: [ each key second
-										at: each key first
-										put: (self destringify: aWish text asString) ]
-								ifFalse: [ each value: (self destringify: aWish text asString) ] ] ] ];
+				ifFalse: [ (isEditable value: item)
+						ifTrue: [ BrEditableLabel new
+								look: BrGlamorousEditableLabelLook new glamorousRegularFontAndSize;
+								text: item;
+								when: BrEditorAcceptWish
+									do: [ :aWish | 
+									each key isArray
+										ifTrue: [ each key second
+												at: each key first
+												put: (self destringify: aWish text asString) ]
+										ifFalse: [ each value: (self destringify: aWish text asString) ] ] ]
+						ifFalse: [ BlTextElement new text: item asRopedText ] ] ];
 		send: #value;
 		expandUpTo: 1.
 	view columns second weight: 1.
