@@ -11,7 +11,7 @@ A tool to quickly modify the values of nested Arrays/Dictionaries in [Glamorous 
 Metacello new
     baseline: 'QuickEdit';
     repository: 'github://botwhytho/quick-edit:main/src';
-    load ].
+    load.
 ```
 
 # Using
