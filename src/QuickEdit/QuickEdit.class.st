@@ -91,12 +91,14 @@ QuickEdit >> destringify: aValue [
 QuickEdit >> editingView: aView [
 	<gtView>
 	| view associate |
-	associate := [ :x :i | i -> x ].
 	view := aView columnedTree
 		title: 'Edit';
 		priority: 1;
 		items: [ self object isArray
-				ifTrue: [ self object collectWithIndex: associate ]
+				ifTrue: [ self object
+						collectWithIndex: [ :anEntry :anIndex | 
+							{anIndex.
+							self object} -> anEntry ] ]
 				ifFalse: [ self object associations ] ];
 		children: [ :each | 
 			| item |
@@ -104,9 +106,18 @@ QuickEdit >> editingView: aView [
 			item isDictionary
 				ifTrue: [ item associations ]
 				ifFalse: [ item isArray
-						ifTrue: [ item collectWithIndex: associate ]
+						ifTrue: [ item
+								collectWithIndex: [ :anEntry :anIndex | 
+									{anIndex.
+									item} -> anEntry ] ]
 						ifFalse: [ #() ] ] ];
-		column: 'Key' text: #key;
+		column: 'Key'
+			item: [ :each | 
+			| aKey |
+			aKey := each key isArray
+				ifTrue: [ each key first ]
+				ifFalse: [ each key ].
+			aKey asRopedText foreground: Color gray ];
 		column: 'Value'
 			icon: [ :each | 
 			| item |
@@ -117,7 +128,12 @@ QuickEdit >> editingView: aView [
 						look: BrGlamorousEditableLabelLook new glamorousRegularFontAndSize;
 						text: item;
 						when: BrEditorAcceptWish
-							do: [ :aWish | each value: (self destringify: aWish text asString) ] ] ];
+							do: [ :aWish | 
+							each key isArray
+								ifTrue: [ each key second
+										at: each key first
+										put: (self destringify: aWish text asString) ]
+								ifFalse: [ each value: (self destringify: aWish text asString) ] ] ] ];
 		send: #value;
 		expandUpTo: 1.
 	view columns second weight: 1.
