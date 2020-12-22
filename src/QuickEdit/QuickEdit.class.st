@@ -82,9 +82,14 @@ QuickEdit class >> DictionaryAtRootExample [
 QuickEdit >> destringify: aValue [
 	"BrEditableLabel holds roped text. This tries to convert back to a valid JSON atomic data type (using nil instead of null because Pharo)"
 
-	^ #(true false nil)
+	| temp |
+	temp := #(true false nil)
 		detect: [ :each | each asString = aValue ]
-		ifNone: [ Number readFrom: aValue ifFail: [ aValue ] ]
+		ifNone: [ Number readFrom: aValue ifFail: [ aValue ] ].
+	"`Number readFrom:` trims any text after a string beginning with what looks like a Float or Interger, so undoing that below."
+	^ (temp asString = aValue) not
+		ifTrue: [ aValue ]
+		ifFalse: [ temp ]
 ]
 
 { #category : #'view updating' }
