@@ -1,9 +1,10 @@
 # QuickEdit
 
-A tool to quickly modify the values of nested Arrays/Dictionaries in [Glamorous Toolkit](https://gtoolkit.com/).
+A tool to quickly modify the values of an Object's slots or of Collections in [Glamorous Toolkit](https://gtoolkit.com/).
 
-- Currently only supporting updating of values.
-- This is geared towards manually modifying JSON data so it's only meant to be used on Arrays/Dictionaries that have Booleans, Numbers, nil or Strings as the nested values.
+- Currently only supporting updating of values (no adding/removing items from a collection, yet).
+- Only values of types Boolean, Number, nil or String will show up as editable.
+- Undo functionality works with Ctrl/Cmd + Z or by clicking an undo button that pops up after changes have been made to a value. Undo history only holds a single value at the moment.
 
 # Installation
 
@@ -16,8 +17,12 @@ Metacello new
 
 # Using
 
-To use, simple send `quickedit` to an Array or Dictionary and inspect the output. You will be able to edit the nested values on the second column of the `Edit` view that comes up. Double click a value to gain editable focus. Once `Enter` is pressed your changes will propagate to the underlying objects; if you want to abort a change, press `Esc`. Running something like the snippet below should give you an idea of the tool's functionality.
+To use, simply inspect an Object or a Collection and you will see new `Edit` & `Items Edit` views respectively where you can modify (and undo) values. Inspect the below snippet in a playground to see the functionality at play. Of note is that by clicking into the `Point` in the below array ang going to it's `Edit` view, you can quickly edit it's underlying coordinates.
 
 ```Smalltalk
-(NeoJSONReader fromString: (ZnClient new get: 'https://httpbin.org/json')) quickedit
+{1 . 2. 3. 4. (NeoJSONReader fromString: (ZnClient new get: 'https://httpbin.org/json')). Object new. 2@2}
 ```
+
+# Caveats
+
+This tool can let you quickly modify the internals of objects (especially when you are modifying non-public slot values) and thus can be great for prototyping, debugging and troubleshooting. The fact that a value can  be 'editable' does not mean that you should change it or that changing it will not have unwanted side-effects, even after undoing. Here be dragons.
