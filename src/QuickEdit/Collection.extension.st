@@ -5,8 +5,9 @@ Collection >> gtItemsEditFor: aView [
 	<gtView>
 	| view |
 	view := aView columnedTree
-		title: 'Items Edit';
+		actionUpdateButtonTooltip: 'Update item list';
 		priority: 52;
+		title: 'Items Edit';
 		items: [ QuickEdit buildItems: self ];
 		children: [ :each | QuickEdit buildChildren: each ];
 		column: 'Key'

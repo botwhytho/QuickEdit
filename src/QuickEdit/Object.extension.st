@@ -6,6 +6,7 @@ Object >> gtEditFor: aView [
 	| view |
 	view := self gtRawFor: aView.
 	view
+		actionUpdateButtonTooltip: 'Update item list';
 		priority: view priority + 1;
 		title: 'Edit'.
 	view columns third
