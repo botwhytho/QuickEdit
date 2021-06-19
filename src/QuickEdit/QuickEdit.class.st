@@ -47,7 +47,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 		alignCenterLeft;
 		vFitContent.
 	aValueEditor := BrEditableLabel new
-		look: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
+		aptitude: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
 		text: item gtDisplayString;
 		margin: (BlInsets all: 0);
 		whenKey: BlKeyCombination primaryR
@@ -62,7 +62,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 	aValueEditor editor history instVarNamed: #shouldGroup put: true.
 	anUndoButton := BrButton new
 		icon: BrGlamorousVectorIcons cancel;
-		look: BrGlamorousButtonWithIconAptitude new;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
 		label: 'Undo';
 		margin: (BlInsets left: 5);
 		visibility: BlVisibility gone;
