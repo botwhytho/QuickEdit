@@ -47,7 +47,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 		alignCenterLeft;
 		vFitContent.
 	aValueEditor := BrEditableLabel new
-		look: BrGlamorousEditableLabelLook new glamorousRegularFontAndSize;
+		look: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
 		text: item gtDisplayString;
 		margin: (BlInsets all: 0);
 		whenKey: BlKeyCombination primaryR
@@ -62,7 +62,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 	aValueEditor editor history instVarNamed: #shouldGroup put: true.
 	anUndoButton := BrButton new
 		icon: BrGlamorousVectorIcons cancel;
-		look: BrGlamorousButtonWithIconLook new;
+		look: BrGlamorousButtonWithIconAptitude new;
 		label: 'Undo';
 		margin: (BlInsets left: 5);
 		visibility: BlVisibility gone;
@@ -105,7 +105,7 @@ QuickEdit class >> buildObjectSlotUpdater: aSlot object: anObject [
 		alignCenterLeft;
 		vFitContent.
 	aValueEditor := BrEditableLabel new
-		look: BrGlamorousEditableLabelLook new glamorousRegularFontAndSize;
+		aptitude: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
 		text: aSlot rawValue gtDisplayString;
 		margin: (BlInsets all: 0);
 		whenKey: BlKeyCombination primaryR
@@ -120,7 +120,7 @@ QuickEdit class >> buildObjectSlotUpdater: aSlot object: anObject [
 	aValueEditor editor history instVarNamed: #shouldGroup put: true.
 	anUndoButton := BrButton new
 		icon: BrGlamorousVectorIcons cancel;
-		look: BrGlamorousButtonWithIconLook new;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
 		label: 'Undo';
 		margin: (BlInsets left: 5);
 		visibility: BlVisibility gone;
