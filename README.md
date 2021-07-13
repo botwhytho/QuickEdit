@@ -12,7 +12,7 @@ A tool to quickly modify the values of an Object's slots or of Collections in [G
 Metacello new
     baseline: 'QuickEdit';
     repository: 'github://botwhytho/quick-edit:main/src';
-    load ].
+    load.
 ```
 
 # Using
