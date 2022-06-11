@@ -1,7 +1,7 @@
 Class {
 	#name : #OrderedJSONObject,
 	#superclass : #OrderedDictionary,
-	#category : #QuickEdit
+	#category : #'QuickEdit-Core'
 }
 
 { #category : #convenience }

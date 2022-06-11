@@ -1,7 +1,7 @@
 Class {
 	#name : #OrderedJSONCollection,
 	#superclass : #OrderedCollection,
-	#category : #'QuickEdit-QuickEdit'
+	#category : #'QuickEdit-Core'
 }
 
 { #category : #'reflective operations' }

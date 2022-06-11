@@ -6,14 +6,13 @@ Object >> gtEditFor: aView [
 	| view |
 	view := self gtRawFor: aView.
 	view
-		actionUpdateButtonTooltip: 'Update item list';
 		priority: view priority + 1;
 		title: 'Edit'.
-	view column: 'Edit'
+	view columns second
 		icon: [ :aNode | 
 			(QuickEdit isEditable: aNode rawValue)
 				ifTrue: [ QuickEdit buildObjectSlotUpdater: aNode object: self ]
 				ifFalse: [ BlTextElement new text: aNode rawValue gtDisplayString asRopedText ] ].
-	view columns third weight: 1.
+	view columns second weight: 1.5.
 	^ view
 ]
