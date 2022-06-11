@@ -9,7 +9,7 @@ Object >> gtEditFor: aView [
 		actionUpdateButtonTooltip: 'Update item list';
 		priority: view priority + 1;
 		title: 'Edit'.
-	view columns third
+	view column: 'Edit'
 		icon: [ :aNode | 
 			(QuickEdit isEditable: aNode rawValue)
 				ifTrue: [ QuickEdit buildObjectSlotUpdater: aNode object: self ]
