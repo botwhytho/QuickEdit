@@ -6,89 +6,112 @@ Class {
 
 { #category : #utilities }
 QuickEdit class >> buildChildren: anItem [
-	| item |
-	item := anItem value.
-	(item respondsTo: #associations)
-		ifTrue: [ ^ item associations ]
-		ifFalse: [ (QuickEdit canBeSequenced: item)
-				ifTrue: [ ^ item
-						collectWithIndex: [ :anEntry :anIndex | 
-							{anIndex.
-							item} -> anEntry ] ]
-				ifFalse: [ ^ #() ] ]
+	| item itemValue |
+	item := [ anItem value key.
+		anItem value value ] onDNU: #key do: [ anItem value ].
+	itemValue := [ item associations ] onDNU: #associations do: [ item ].
+	(QuickEdit canBeSequenced: itemValue) ifFalse: [ ^ #() ].
+	^ itemValue asOrderedCollection
+		collectWithIndex: [ :each :index | 
+			EditableItemOrCollection new
+				parent: anItem parent;
+				collection: item;
+				value: each;
+				index: index ]
 ]
 
 { #category : #'building ui' }
 QuickEdit class >> buildCollectionValueColumn: each [
-	| item |
+	| item itemValue |
 	item := each value.
-	((item respondsTo: #associations)
-		or: [ QuickEdit canBeSequenced: item ])
+	itemValue := [ item key. item value ] onDNU: #key do: [ item ].
+	(QuickEdit canBeSequenced: ([itemValue associations] onDNU: #associations do: [itemValue]))
 		ifTrue: [ ^ BlTextElement new text: '' asRopedText ]
-		ifFalse: [ (QuickEdit isEditable: item)
+		ifFalse: [ (QuickEdit isEditable: itemValue)
 				ifTrue: [ ^ QuickEdit buildCollectionValueUpdater: each ]
-				ifFalse: [ ^ BlTextElement new text: item asRopedText ] ]
+				ifFalse: [ ^ BlTextElement new text: itemValue asRopedText ] ]
 ]
 
 { #category : #'building ui' }
 QuickEdit class >> buildCollectionValueUpdater: each [
-	| aContainer anUndoButton aValueEditor displayPreviousValue item updateUnderlyingValue |
+	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor displayPreviousValue item itemValue updateUnderlyingValue |
 	item := each value.
+	itemValue := [item key. item value] onDNU: #key do: [item].
 	displayPreviousValue := [ (aValueEditor editor history
-		instVarNamed: #currentGroup) undoOn: aValueEditor editor.
-	anUndoButton visibility: BlVisibility gone ].
-	updateUnderlyingValue := [ each key isArray
-		ifTrue: [ each key second
-				at: each key first
-				put: (QuickEdit destringify: aValueEditor text asString) ]
-		ifFalse: [ each value: (QuickEdit destringify: aValueEditor text asString) ] ].
+			instVarNamed: #currentGroup) undoOn: aValueEditor editor.
+		anUndoButton visibility: BlVisibility gone ].
+	updateUnderlyingValue := [ (item respondsTo: #key)
+			ifTrue: [ item value: (QuickEdit destringify: aValueEditor text asString) ]
+			ifFalse: [ each collection
+					at: each index
+					put: (QuickEdit destringify: aValueEditor text asString) ] ].
 	aContainer := BrHorizontalPane new
-		hMatchParent;
-		alignCenterLeft;
-		vFitContent.
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
 	aValueEditor := BrEditableLabel new
-		aptitude: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
-		text: item gtDisplayString;
-		margin: (BlInsets all: 0);
-		whenKey: BlKeyCombination primaryR
-			labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
-		whenKey: BlKeyCombination primaryZ
-			labelDo: [ :aShortcutEvent | 
-			displayPreviousValue value.
-			updateUnderlyingValue value ];
-		whenKey: BlKeyCombination primaryC
-			labelDo:
-				[ :aShortcutEvent | Clipboard clipboardText: aValueEditor text asString ].
+			aptitude: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
+			text: itemValue gtDisplayString;
+			margin: (BlInsets all: 0);
+			whenKey: BlKeyCombination primaryR
+				labelDo: [ :aShortcutEvent | aShortcutEvent currentTarget switchToEditor ];
+			whenKey: BlKeyCombination primaryZ
+				labelDo: [ :aShortcutEvent | 
+					displayPreviousValue value.
+					updateUnderlyingValue value ];
+			whenKey: BlKeyCombination primaryC
+				labelDo: [ :aShortcutEvent | Clipboard clipboardText: aValueEditor text asString ].
 	aValueEditor editor history instVarNamed: #shouldGroup put: true.
 	anUndoButton := BrButton new
-		icon: BrGlamorousVectorIcons cancel;
-		aptitude: BrGlamorousButtonWithIconAptitude new;
-		label: 'Undo';
-		margin: (BlInsets left: 5);
-		visibility: BlVisibility gone;
-		action: [ displayPreviousValue value.
-			updateUnderlyingValue value ];
-		yourself.
+			icon: BrGlamorousVectorIcons cancel;
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			label: 'Undo';
+			margin: (BlInsets left: 5);
+			visibility: BlVisibility gone;
+			action: [ displayPreviousValue value.
+				updateUnderlyingValue value ];
+			yourself.
+	anAddAboveButton := BrButton new
+			icon: BrGlamorousVectorIcons upwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			label: 'Add Above';
+			margin: (BlInsets left: 5);
+			action: [ self inform: 'Above' ];
+			yourself.
+	anAddBelowButton := BrButton new
+			icon: BrGlamorousVectorIcons downwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new;
+			label: 'Add Below';
+			margin: (BlInsets left: 5);
+			action: [ :aButtonElement :aButtonModel :anEvent | 
+			| tmp coll |
+			tmp := each.
+			self halt.
+			self inform: 'Below' ];
+			yourself.
 	aValueEditor
 		when: BrEditorAcceptWish
 		do: [ :aWish | 
 			anUndoButton visibility: BlVisibility visible.
 			updateUnderlyingValue value ].
 	aContainer
-		addChildren:
-			{aValueEditor.
-			anUndoButton}.
+		addChildren: {aValueEditor.
+				anAddBelowButton.
+				anAddAboveButton.
+				anUndoButton}.
 	^ aContainer
 ]
 
 { #category : #utilities }
 QuickEdit class >> buildItems: aCollection [
-	^ (aCollection respondsTo: #associations)
-		ifTrue: [ aCollection associations ]
-		ifFalse: [ aCollection
-				collectWithIndex: [ :anEntry :anIndex | 
-					{anIndex.
-					aCollection} -> anEntry ] ]
+	^ ([ aCollection associations ] onDNU: #associations do: [ aCollection ])
+		asOrderedCollection
+		collectWithIndex: [ :each :index | 
+			EditableItemOrCollection new
+				parent: aCollection;
+				collection: aCollection;
+				value: each;
+				index: index ]
 ]
 
 { #category : #'building ui' }

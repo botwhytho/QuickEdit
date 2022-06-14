@@ -12,9 +12,7 @@ Collection >> gtItemsEditFor: aView [
 		        items: [ QuickEdit buildItems: self ];
 		        children: [ :each | QuickEdit buildChildren: each ];
 		        column: 'Key' text: [ :each | 
-			        (each key isArray
-				         ifTrue: [ each key first ]
-				         ifFalse: [ each key ]) asRopedText foreground: Color gray ];
+			        ([each value key] onDNU: #key do: [each index]) asRopedText foreground: Color gray ];
 		        column: 'Value'
 		        icon: [ :each | QuickEdit buildCollectionValueColumn: each ];
 		        send: #value;
