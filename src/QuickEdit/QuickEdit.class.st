@@ -36,7 +36,8 @@ QuickEdit class >> buildCollectionValueColumn: each [
 QuickEdit class >> buildCollectionValueUpdater: each [
 	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor displayPreviousValue item itemValue updateUnderlyingValue |
 	item := each value.
-	itemValue := [item key. item value] onDNU: #key do: [item].
+	itemValue := [ item key.
+		item value ] onDNU: #key do: [ item ].
 	displayPreviousValue := [ (aValueEditor editor history
 			instVarNamed: #currentGroup) undoOn: aValueEditor editor.
 		anUndoButton visibility: BlVisibility gone ].
@@ -76,19 +77,44 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			label: 'Add Above';
 			margin: (BlInsets left: 5);
-			action: [ self inform: 'Above' ];
+			action: [ | tmp tmpValue |
+				tmp := ([ each collection associations ]
+						onDNU: #associations
+						do: [ each collection ]) asOrderedCollection.
+				tmp
+					add: ([ each value key.
+						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+					beforeIndex: each index.
+				tmpValue := (tmp first respondsTo: #key)
+						ifTrue: [ tmp asOrderedDictionary ]
+						ifFalse: [ tmp ].
+				each parent = each collection
+					ifTrue: [ each parent become: tmpValue ]
+					ifFalse: [ each parent isDictionary
+							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ] ];
 			yourself.
 	anAddBelowButton := BrButton new
 			icon: BrGlamorousVectorIcons downwards;
 			aptitude: BrGlamorousButtonWithIconAptitude new;
 			label: 'Add Below';
 			margin: (BlInsets left: 5);
-			action: [ :aButtonElement :aButtonModel :anEvent | 
-			| tmp coll |
-			tmp := each.
-			self halt.
-			self inform: 'Below' ];
-			yourself.
+			action: [ | tmp tmpValue |
+				tmp := ([ each collection associations ]
+						onDNU: #associations
+						do: [ each collection ]) asOrderedCollection.
+				tmp
+					add: ([ each value key.
+						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+					afterIndex: each index.
+				tmpValue := (tmp first respondsTo: #key)
+						ifTrue: [ tmp asOrderedDictionary ]
+						ifFalse: [ tmp ].
+				each parent = each collection
+					ifTrue: [ each parent become: tmpValue ]
+					ifFalse: [ each parent isDictionary
+							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ] ].
 	aValueEditor
 		when: BrEditorAcceptWish
 		do: [ :aWish | 
