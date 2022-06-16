@@ -74,7 +74,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 			yourself.
 	anAddAboveButton := BrButton new
 			icon: BrGlamorousVectorIcons upwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new;
+			aptitude: BrGlamorousButtonWithIconAptitude new + each dropdownUp;
 			label: 'Add Above';
 			margin: (BlInsets left: 5);
 			action: [ | tmp tmpValue |
@@ -96,7 +96,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 			yourself.
 	anAddBelowButton := BrButton new
 			icon: BrGlamorousVectorIcons downwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new;
+			aptitude: BrGlamorousButtonWithIconAptitude new + each dropdownDown;
 			label: 'Add Below';
 			margin: (BlInsets left: 5);
 			action: [ | tmp tmpValue |

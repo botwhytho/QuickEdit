@@ -22,6 +22,60 @@ EditableItemOrCollection >> collection: aCollection [
 ]
 
 { #category : #accessing }
+EditableItemOrCollection >> dropdownDown [
+	| aptitude |
+	aptitude := BrGlamorousWithDropdownAptitude
+			stencil: [  "aSpotterModel announcer
+					when: GtSpotterActOn
+					do: [ :e | 
+						(#(singleClick doubleClick keyPressed) includes: e eventType)
+							ifTrue: [ aptitude hide ] ]."BlElement
+					new
+					aptitude: (BrGlamorousDropdownAptitude new
+							handle: (BrButton new
+									aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+											- BrGlamorousButtonExteriorAptitude;
+									icon: BrGlamorousVectorIcons downwards;
+									yourself);
+							content: (BlElement new
+									constraintsDo: [ :c | 
+										c horizontal exact: 600.
+										c vertical exact: 400 ];
+									yourself);
+							yourself);
+					background: BrGlamorousColors secondaryHeaderBackgroundColor;
+					yourself ].
+	^ aptitude
+]
+
+{ #category : #accessing }
+EditableItemOrCollection >> dropdownUp [
+	| aptitude |
+	aptitude := BrGlamorousWithDropdownAptitude
+			stencil: [  "aSpotterModel announcer
+					when: GtSpotterActOn
+					do: [ :e | 
+						(#(singleClick doubleClick keyPressed) includes: e eventType)
+							ifTrue: [ aptitude hide ] ]."BlElement
+					new
+					aptitude: (BrGlamorousDropdownAptitude new
+							handle: (BrButton new
+									aptitude: BrGlamorousButtonWithIconAptitude - BrGlamorousButtonWithLabelTooltipAptitude
+											- BrGlamorousButtonExteriorAptitude;
+									icon: BrGlamorousVectorIcons upwards;
+									yourself);
+							content: (BlElement new
+									constraintsDo: [ :c | 
+										c horizontal exact: 600.
+										c vertical exact: 400 ];
+									yourself);
+							yourself);
+					background: BrGlamorousColors secondaryHeaderBackgroundColor;
+					yourself ].
+	^ aptitude
+]
+
+{ #category : #accessing }
 EditableItemOrCollection >> index [
 
 	^ index
