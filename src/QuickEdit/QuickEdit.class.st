@@ -28,8 +28,77 @@ QuickEdit class >> buildCollectionValueColumn: each [
 	(QuickEdit canBeSequenced: ([itemValue associations] onDNU: #associations do: [itemValue]))
 		ifTrue: [ ^ BlTextElement new text: '' asRopedText ]
 		ifFalse: [ (QuickEdit isEditable: itemValue)
-				ifTrue: [ ^ QuickEdit buildCollectionValueUpdater: each ]
+				ifTrue: [ ^ QuickEdit buildCollectionValueUpdater2: each ]
 				ifFalse: [ ^ BlTextElement new text: itemValue asRopedText ] ]
+]
+
+{ #category : #'building ui' }
+QuickEdit class >> buildCollectionValueUpdater2: each [
+	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor  item itemValue  |
+	item := each value.
+	itemValue := [ item key.
+		item value ] onDNU: #key do: [ item ].
+	aContainer := BrHorizontalPane new
+			hMatchParent;
+			alignCenterLeft;
+			vFitContent.
+	aValueEditor := BrUndoableLabel value: each object: each updateEntity: #collection.
+	aValueEditor when: BrEditorAcceptWish
+		do: [ :aWish | 
+			anUndoButton visibility: BlVisibility visible.
+			aValueEditor updateValue  ].
+	anUndoButton := QuickEdit undoButton: aValueEditor.
+	anAddAboveButton := BrButton new.
+			anAddAboveButton icon: BrGlamorousVectorIcons upwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new"+ each dropdownUp";
+			label: 'Add Above';
+			margin: (BlInsets left: 5);
+			action: [ | tmp tmpValue |
+				tmp := ([ each collection associations ]
+						onDNU: #associations
+						do: [ each collection ]) asOrderedCollection.
+				tmp
+					add: ([ each value key.
+						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+					beforeIndex: each index.
+				tmpValue := (tmp first respondsTo: #key)
+						ifTrue: [ tmp asOrderedDictionary ]
+						ifFalse: [ tmp ].
+				each parent = each collection
+					ifTrue: [ each parent become: tmpValue ]
+					ifFalse: [ each parent isDictionary
+							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+				(GtPhlowUpdateView new elementContext: anAddAboveButton phlow) execute ];
+			yourself.	
+	anAddBelowButton := BrButton new.
+			anAddBelowButton icon: BrGlamorousVectorIcons downwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new "+ each dropdownDown";
+			label: 'Add Below';
+			margin: (BlInsets left: 5);
+			action: [ | tmp tmpValue |
+				tmp := ([ each collection associations ]
+						onDNU: #associations
+						do: [ each collection ]) asOrderedCollection.
+				tmp
+					add: ([ each value key.
+						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+					afterIndex: each index.
+				tmpValue := (tmp first respondsTo: #key)
+						ifTrue: [ tmp asOrderedDictionary ]
+						ifFalse: [ tmp ].
+				each parent = each collection
+					ifTrue: [ each parent become: tmpValue ]
+					ifFalse: [ each parent isDictionary
+							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+				(GtPhlowUpdateView new elementContext: anAddBelowButton phlow) execute ].
+	aContainer
+		addChildren: {aValueEditor.
+				anAddBelowButton.
+				anAddAboveButton.
+				anUndoButton}.
+	^ aContainer
 ]
 
 { #category : #'building ui' }
@@ -72,9 +141,9 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 			action: [ displayPreviousValue value.
 				updateUnderlyingValue value ];
 			yourself.
-	anAddAboveButton := BrButton new
-			icon: BrGlamorousVectorIcons upwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new + each dropdownUp;
+	anAddAboveButton := BrButton new.
+			anAddAboveButton icon: BrGlamorousVectorIcons upwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new"+ each dropdownUp";
 			label: 'Add Above';
 			margin: (BlInsets left: 5);
 			action: [ | tmp tmpValue |
@@ -92,11 +161,12 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 					ifTrue: [ each parent become: tmpValue ]
 					ifFalse: [ each parent isDictionary
 							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
-							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ] ];
-			yourself.
-	anAddBelowButton := BrButton new
-			icon: BrGlamorousVectorIcons downwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new + each dropdownDown;
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+				(GtPhlowUpdateView new elementContext: anAddAboveButton phlow) execute ];
+			yourself.	
+	anAddBelowButton := BrButton new.
+			anAddBelowButton icon: BrGlamorousVectorIcons downwards;
+			aptitude: BrGlamorousButtonWithIconAptitude new "+ each dropdownDown";
 			label: 'Add Below';
 			margin: (BlInsets left: 5);
 			action: [ | tmp tmpValue |
@@ -114,7 +184,8 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 					ifTrue: [ each parent become: tmpValue ]
 					ifFalse: [ each parent isDictionary
 							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
-							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ] ].
+							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+				(GtPhlowUpdateView new elementContext: anAddBelowButton phlow) execute ].
 	aValueEditor
 		when: BrEditorAcceptWish
 		do: [ :aWish | 
@@ -212,4 +283,16 @@ QuickEdit class >> destringify: aValue [
 QuickEdit class >> isEditable: aValue [
 	^ #(#isBoolean #isNil #isNumber #isString)
 		anySatisfy: [ :aSelector | aValue perform: aSelector ]
+]
+
+{ #category : #accessing }
+QuickEdit class >> undoButton: anUndoableButton [
+	^ BrButton new
+		icon: BrGlamorousVectorIcons cancel;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
+		label: 'Undo';
+		margin: (BlInsets left: 5);
+		visibility: BlVisibility gone;
+		action: [ anUndoableButton undo ];
+		yourself
 ]
