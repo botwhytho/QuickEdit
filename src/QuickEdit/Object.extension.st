@@ -2,7 +2,7 @@ Extension { #name : #Object }
 
 { #category : #'*QuickEdit' }
 Object >> gtEditFor: aView [
-	<gtView>
+	"<gtView>"
 	| view |
 	view := self gtRawFor: aView.
 	view
