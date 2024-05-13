@@ -69,8 +69,7 @@ QuickEdit class >> buildCollectionValueUpdater2: each [
 					ifFalse: [ each parent isDictionary
 							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
 							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
-				(GtPhlowUpdateView new elementContext: anAddAboveButton phlow) execute ];
-			yourself.	
+				anAddBelowButton phlow firstParentWithView phlow update ].	
 	anAddBelowButton := BrButton new.
 			anAddBelowButton icon: BrGlamorousVectorIcons downwards;
 			aptitude: BrGlamorousButtonWithIconAptitude new "+ each dropdownDown";
@@ -92,7 +91,7 @@ QuickEdit class >> buildCollectionValueUpdater2: each [
 					ifFalse: [ each parent isDictionary
 							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
 							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
-				(GtPhlowUpdateView new elementContext: anAddBelowButton phlow) execute ].
+				 anAddBelowButton phlow firstParentWithView phlow update ].
 	aContainer
 		addChildren: {aValueEditor.
 				anAddBelowButton.
