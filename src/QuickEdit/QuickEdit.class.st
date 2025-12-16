@@ -1,10 +1,12 @@
 Class {
-	#name : #QuickEdit,
-	#superclass : #Object,
-	#category : #'QuickEdit-Core'
+	#name : 'QuickEdit',
+	#superclass : 'Object',
+	#category : 'QuickEdit-Core',
+	#package : 'QuickEdit',
+	#tag : 'Core'
 }
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 QuickEdit class >> buildChildren: anItem [
 	| item itemValue |
 	item := [ anItem value key.
@@ -20,7 +22,7 @@ QuickEdit class >> buildChildren: anItem [
 				index: index ]
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 QuickEdit class >> buildCollectionValueColumn: each [
 	| item itemValue |
 	item := each value.
@@ -32,7 +34,7 @@ QuickEdit class >> buildCollectionValueColumn: each [
 				ifFalse: [ ^ BlTextElement new text: itemValue asRopedText ] ]
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 QuickEdit class >> buildCollectionValueUpdater2: each [
 	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor  item itemValue  |
 	item := each value.
@@ -100,7 +102,7 @@ QuickEdit class >> buildCollectionValueUpdater2: each [
 	^ aContainer
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 QuickEdit class >> buildCollectionValueUpdater: each [
 	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor displayPreviousValue item itemValue updateUnderlyingValue |
 	item := each value.
@@ -198,7 +200,7 @@ QuickEdit class >> buildCollectionValueUpdater: each [
 	^ aContainer
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 QuickEdit class >> buildItems: aCollection [
 	^ ([ aCollection associations ] onDNU: #associations do: [ aCollection ])
 		asOrderedCollection
@@ -210,7 +212,7 @@ QuickEdit class >> buildItems: aCollection [
 				index: index ]
 ]
 
-{ #category : #'building ui' }
+{ #category : 'building ui' }
 QuickEdit class >> buildObjectSlotUpdater: aSlot object: anObject [
 	| aContainer anUndoButton aValueEditor displayPreviousValue updateUnderlyingValue |
 	displayPreviousValue := [ (aValueEditor editor history
@@ -258,13 +260,13 @@ QuickEdit class >> buildObjectSlotUpdater: aSlot object: anObject [
 	^ aContainer
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 QuickEdit class >> canBeSequenced: anItem [
 	^ ((anItem respondsTo: #isSequenceable)
 		and: [ anItem isSequenceable ]) and: [ anItem isString not ]
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 QuickEdit class >> destringify: aValue [
 	"BrEditableLabel holds roped text. This tries to convert back to a valid JSON atomic data type (using nil instead of null because Pharo)"
 
@@ -278,13 +280,13 @@ QuickEdit class >> destringify: aValue [
 		ifFalse: [ aValue ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 QuickEdit class >> isEditable: aValue [
 	^ #(#isBoolean #isNil #isNumber #isString)
 		anySatisfy: [ :aSelector | aValue perform: aSelector ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 QuickEdit class >> undoButton: anUndoableButton [
 	^ BrButton new
 		icon: BrGlamorousVectorIcons cancel;

@@ -1,12 +1,12 @@
-Extension { #name : #NeoJSONObject }
+Extension { #name : 'NeoJSONObject' }
 
-{ #category : #'*QuickEdit' }
+{ #category : '*QuickEdit' }
 NeoJSONObject class >> fromStringUseArrays: string [
 
 	^ self fromString: string
 ]
 
-{ #category : #'*QuickEdit' }
+{ #category : '*QuickEdit' }
 NeoJSONObject class >> fromStringUseOrderedCollections: string [
 
 	^ (NeoJSONReader on: string readStream)

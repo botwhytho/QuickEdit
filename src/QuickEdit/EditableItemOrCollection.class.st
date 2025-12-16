@@ -1,27 +1,29 @@
 Class {
-	#name : #EditableItemOrCollection,
-	#superclass : #Object,
+	#name : 'EditableItemOrCollection',
+	#superclass : 'Object',
 	#instVars : [
 		'collection',
 		'parent',
 		'value',
 		'index'
 	],
-	#category : #'QuickEdit-Core'
+	#category : 'QuickEdit-Core',
+	#package : 'QuickEdit',
+	#tag : 'Core'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> collection [
 
 	^ collection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> collection: aCollection [
 	collection := aCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> dropdownDown [
 	| aptitude |
 	aptitude := BrGlamorousWithDropdownAptitude
@@ -48,7 +50,7 @@ EditableItemOrCollection >> dropdownDown [
 	^ aptitude
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> dropdownUp [
 	| aptitude |
 	aptitude := BrGlamorousWithDropdownAptitude
@@ -75,36 +77,36 @@ EditableItemOrCollection >> dropdownUp [
 	^ aptitude
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> index [
 
 	^ index
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> index: anObject [
 
 	index := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> parent: anObject [
 
 	parent := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> value [
 	^ value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 EditableItemOrCollection >> value: anObject [
 
 	value := anObject

@@ -1,16 +1,18 @@
 Class {
-	#name : #BrUndoableLabel,
-	#superclass : #BrEditableLabel,
+	#name : 'BrUndoableLabel',
+	#superclass : 'BrEditableLabel',
 	#instVars : [
 		'value',
 		'object',
 		'entityType',
 		'entities'
 	],
-	#category : #'QuickEdit-Core'
+	#category : 'QuickEdit-Core',
+	#package : 'QuickEdit',
+	#tag : 'Core'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel class >> value: aValue object: anObject updateEntity: aSymbol [
 	^ self new
 		value: aValue;
@@ -19,17 +21,17 @@ BrUndoableLabel class >> value: aValue object: anObject updateEntity: aSymbol [
 		entityType: aSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> displayPrevious [
 	(self editor history instVarNamed: #currentGroup) undoOn: self editor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> entityType: aSymbol [
 	entityType := aSymbol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> initialize [
 	super initialize.
 	self
@@ -45,18 +47,18 @@ BrUndoableLabel >> initialize [
 			#collection -> #updateCollectionValue} asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> object: anObject [
 	object := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> undo [
 	self displayPrevious.
 	self updateValue
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> updateCollectionValue [
 	(value respondsTo: #key)
 		ifTrue: [ value value value: (QuickEdit destringify: self text asString) ]
@@ -65,19 +67,19 @@ BrUndoableLabel >> updateCollectionValue [
 				put: (QuickEdit destringify: self text asString) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> updateSlotValue [
 	object
 		instVarNamed: value label
 		put: (QuickEdit destringify: self text asString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> updateValue [
 	self perform: (entities at: entityType)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BrUndoableLabel >> value: aValue [
 	value := aValue
 ]

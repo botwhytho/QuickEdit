@@ -1,10 +1,12 @@
 Class {
-	#name : #OrderedJSONCollection,
-	#superclass : #OrderedCollection,
-	#category : #'QuickEdit-Core'
+	#name : 'OrderedJSONCollection',
+	#superclass : 'OrderedCollection',
+	#category : 'QuickEdit-Core',
+	#package : 'QuickEdit',
+	#tag : 'Core'
 }
 
-{ #category : #'reflective operations' }
+{ #category : 'reflective operations' }
 OrderedJSONCollection >> doesNotUnderstand: message [
 	"Overwritten so that 'self [aNumber]th'  becomes 'self at: aNumber' for
 	when nested collectopms are encountered.

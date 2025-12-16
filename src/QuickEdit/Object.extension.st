@@ -1,18 +1,18 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*QuickEdit' }
+{ #category : '*QuickEdit' }
 Object >> gtEditFor: aView [
-	"<gtView>"
+	<gtView>
 	| view |
 	view := self gtRawFor: aView.
 	view
 		priority: view priority + 1;
 		title: 'Edit'.
-	view columns second
-		icon: [ :aNode | 
+	view
+		column: 'Edit'
+		stencil: [ :aNode | 
 			(QuickEdit isEditable: aNode rawValue)
 				ifTrue: [ QuickEdit buildObjectSlotUpdater: aNode object: self ]
 				ifFalse: [ BlTextElement new text: aNode rawValue gtDisplayString asRopedText ] ].
-	view columns second weight: 1.5.
 	^ view
 ]

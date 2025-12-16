@@ -1,10 +1,12 @@
 Class {
-	#name : #OrderedJSONObject,
-	#superclass : #OrderedDictionary,
-	#category : #'QuickEdit-Core'
+	#name : 'OrderedJSONObject',
+	#superclass : 'OrderedDictionary',
+	#category : 'QuickEdit-Core',
+	#package : 'QuickEdit',
+	#tag : 'Core'
 }
 
-{ #category : #convenience }
+{ #category : 'convenience' }
 OrderedJSONObject class >> fromString: string [
 	"Parse string as JSON, so that maps become instances of me"
 
@@ -15,7 +17,7 @@ OrderedJSONObject class >> fromString: string [
 		next
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OrderedJSONObject >> at: key [
 	"I return nil for missing keys.
 	My superclass would signal a KeyNotFound."
@@ -23,7 +25,7 @@ OrderedJSONObject >> at: key [
 	^ self at: key ifAbsent: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OrderedJSONObject >> atPath: keyCollection [
 	"Use each key in keyCollection recursively, stop when nil is encountered"
 	
@@ -35,7 +37,7 @@ OrderedJSONObject >> atPath: keyCollection [
 	^ value 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OrderedJSONObject >> atPath: keyCollection put: newValue [
 	"Use each key in keyCollection recursively, create new levels when needed"
 	
@@ -49,7 +51,7 @@ OrderedJSONObject >> atPath: keyCollection put: newValue [
 	^ target at: keyCollection last put: newValue
 ]
 
-{ #category : #'reflective operations' }
+{ #category : 'reflective operations' }
 OrderedJSONObject >> doesNotUnderstand: message [
 	"Overwritten so that 'self foo' becomes 'self at: #foo'
 	and 'self foo: 1' becomes 'self at: #foo put: 1' except that self is returned"
@@ -64,14 +66,14 @@ OrderedJSONObject >> doesNotUnderstand: message [
 		ifFalse: [ super doesNotUnderstand: message ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OrderedJSONObject >> name [
 	"Overwritten to make this accessor available as key"
 	
 	^ self at: #name
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OrderedJSONObject >> printOn: stream [
 	"I use my JSON representation when printing myself"
 
@@ -85,7 +87,7 @@ OrderedJSONObject >> printOn: stream [
 				nextPutAll: exception printString ]
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 OrderedJSONObject >> value [
 	"Overwritten to make this accessor available as key"
 	

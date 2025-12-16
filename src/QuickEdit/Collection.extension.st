@@ -1,6 +1,6 @@
-Extension { #name : #Collection }
+Extension { #name : 'Collection' }
 
-{ #category : #'*QuickEdit' }
+{ #category : '*QuickEdit' }
 Collection >> gtItemsEditFor: aView [
 
 	<gtView>

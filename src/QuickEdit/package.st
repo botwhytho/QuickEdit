@@ -1,1 +1,1 @@
-Package { #name : #QuickEdit }
+Package { #name : 'QuickEdit' }
