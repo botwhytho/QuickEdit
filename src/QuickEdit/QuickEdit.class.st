@@ -36,7 +36,7 @@ QuickEdit class >> buildCollectionValueColumn: each [
 
 { #category : 'building ui' }
 QuickEdit class >> buildCollectionValueUpdater2: each [
-	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor  item itemValue  |
+	| aContainer anAddAboveButton anAddBelowButton anUndoButton aValueEditor item itemValue |
 	item := each value.
 	itemValue := [ item key.
 		item value ] onDNU: #key do: [ item ].
@@ -44,56 +44,62 @@ QuickEdit class >> buildCollectionValueUpdater2: each [
 			hMatchParent;
 			alignCenterLeft;
 			vFitContent.
-	aValueEditor := BrUndoableLabel value: each object: each updateEntity: #collection.
-	aValueEditor when: BrEditorAcceptWish
+	aValueEditor := BrUndoableLabel
+			value: each
+			object: each
+			updateEntity: #collection.
+	aValueEditor
+		when: BrEditorAcceptWish
 		do: [ :aWish | 
 			anUndoButton visibility: BlVisibility visible.
-			aValueEditor updateValue  ].
+			aValueEditor updateValue ].
 	anUndoButton := QuickEdit undoButton: aValueEditor.
 	anAddAboveButton := BrButton new.
-			anAddAboveButton icon: BrGlamorousVectorIcons upwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new"+ each dropdownUp";
-			label: 'Add Above';
-			margin: (BlInsets left: 5);
-			action: [ | tmp tmpValue |
-				tmp := ([ each collection associations ]
-						onDNU: #associations
-						do: [ each collection ]) asOrderedCollection.
-				tmp
-					add: ([ each value key.
-						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
-					beforeIndex: each index.
-				tmpValue := (tmp first respondsTo: #key)
-						ifTrue: [ tmp asOrderedDictionary ]
-						ifFalse: [ tmp ].
-				each parent = each collection
-					ifTrue: [ each parent become: tmpValue ]
-					ifFalse: [ each parent isDictionary
-							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
-							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
-				anAddBelowButton phlow firstParentWithView phlow update ].	
+	anAddAboveButton
+		icon: BrGlamorousVectorIcons upwards;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
+		label: 'Add Above';
+		margin: (BlInsets left: 5);
+		action: [ | tmp tmpValue |
+			tmp := ([ each collection associations ]
+					onDNU: #associations
+					do: [ each collection ]) asOrderedCollection.
+			tmp
+				add: ([ each value key.
+					'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+				beforeIndex: each index.
+			tmpValue := (tmp first respondsTo: #key)
+					ifTrue: [ tmp asOrderedDictionary ]
+					ifFalse: [ tmp ].
+			each parent = each collection
+				ifTrue: [ each parent become: tmpValue ]
+				ifFalse: [ each parent isDictionary
+						ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+						ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+			anAddBelowButton phlow firstParentWithViewContent phlow update ].
 	anAddBelowButton := BrButton new.
-			anAddBelowButton icon: BrGlamorousVectorIcons downwards;
-			aptitude: BrGlamorousButtonWithIconAptitude new "+ each dropdownDown";
-			label: 'Add Below';
-			margin: (BlInsets left: 5);
-			action: [ | tmp tmpValue |
-				tmp := ([ each collection associations ]
-						onDNU: #associations
-						do: [ each collection ]) asOrderedCollection.
-				tmp
-					add: ([ each value key.
-						'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
-					afterIndex: each index.
-				tmpValue := (tmp first respondsTo: #key)
-						ifTrue: [ tmp asOrderedDictionary ]
-						ifFalse: [ tmp ].
-				each parent = each collection
-					ifTrue: [ each parent become: tmpValue ]
-					ifFalse: [ each parent isDictionary
-							ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
-							ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
-				 anAddBelowButton phlow firstParentWithView phlow update ].
+	anAddBelowButton
+		icon: BrGlamorousVectorIcons downwards;
+		aptitude: BrGlamorousButtonWithIconAptitude new;
+		label: 'Add Below';
+		margin: (BlInsets left: 5);
+		action: [ | tmp tmpValue |
+			tmp := ([ each collection associations ]
+					onDNU: #associations
+					do: [ each collection ]) asOrderedCollection.
+			tmp
+				add: ([ each value key.
+					'fourtytwo' -> 42 ] onDNU: #key do: [ 42 ])
+				afterIndex: each index.
+			tmpValue := (tmp first respondsTo: #key)
+					ifTrue: [ tmp asOrderedDictionary ]
+					ifFalse: [ tmp ].
+			each parent = each collection
+				ifTrue: [ each parent become: tmpValue ]
+				ifFalse: [ each parent isDictionary
+						ifTrue: [ each parent at: (each parent keyAtValue: each collection) put: tmpValue ]
+						ifFalse: [ each parent at: (each parent indexOf: each collection) put: tmpValue ] ].
+			anAddBelowButton phlow firstParentWithView phlow update ].
 	aContainer
 		addChildren: {aValueEditor.
 				anAddBelowButton.
